@@ -6,14 +6,14 @@ var data = {
 };
 
 var mappings = {
-  get: function (url) {
+  get: function (url, callback) {
     var alias = url.substring(1);
 
     if (!data[alias]) {
-      return undefined;
+      return callback(new Error('URL not found.'));
     }
 
-    return data[alias];
+    return callback(null, data[alias]);
   }
 };
 
