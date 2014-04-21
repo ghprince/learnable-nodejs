@@ -9,10 +9,13 @@ var db = {
                             autoload: true})
 };
 
-db.mappings.insert({ alias: 'g', url: 'http://www.google.com' },
-                    function (err, insertedDocument) {
-//...
-});
+// Add sample data if database is empty
+if (db.mappings.count({}) == 0) {
+  db.mappings.insert({ alias: 'g', url: 'http://www.google.com' },
+                      function (err, insertedDocument) {
+  //...
+  });
+};
 
 var mappings = {
   get: function (alias, callback) {

@@ -3,7 +3,8 @@
 var http = require('http'),
     path = require('path');
 
-var express = require('express');
+var express = require('express'),
+    socket = require('socket.io');
 
 var mappings = require('./data/mappings'),
     logger = require('./logger');
@@ -14,13 +15,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('Redirector'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-  mappings.list(function (err, documents) {
-    res.render("index", {
-      mappings: documents
-    });
-  });
+  res.render("index");
 });
 
 app.get('/:alias', function (req, res) {
@@ -30,4 +28,18 @@ app.get('/:alias', function (req, res) {
   });
 });
 
-http.createServer(app).listen(3000);
+var server = http.createServer(app);
+server.listen(3000);
+
+var io = socket.listen(server);
+
+io.sockets.on('connection', function (socket) {
+  mappings.list(function (err, documents) {
+    socket.emit('list', documents);
+  });
+  socket.on('addMapping', function (mapping) {
+    mappings.create(mapping.alias, mapping.url, function() {
+      io.sockets.emit('newMapping', mapping);
+    });
+  });
+});

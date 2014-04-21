@@ -1,21 +1,27 @@
 <!doctype html>
-<html>
+<html ng-app>
   <head>
     <title>Redirector: Mappings</title>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script type="text/javascript" src="/AppController.js"></script>
   </head>
-  <body>
+  <body ng-controller="AppController">
     <h1>Redirector Mappings</h1>
     <table>
       <tr>
         <th>Alias</th>
         <th>URL</th>
       </tr>
-      <% for (var i = 0; i < mappings.length; i++) { %>
+      <tr>
+        <td><input type="text" ng-model="alias" /></td>
+        <td><input type="text" ng-model="url" /></td>
+        <td><button ng-click="addMapping()">Add New Mapping</button></td>
       </tr>
-        <th><a href="/<%= mappings[i].alias %>"><%= mappings[i].alias %></a></th>
-        <th><%= mappings[i].url %>
+      <tr ng-repeat="mapping in mappings">
+        <td><a href="/{{mapping.alias}}">{{mapping.alias}}</a></td>
+        <td>{{mapping.url}}</td>
       </tr>
-      <% } %>
     </table>
   </body>
 </html>
