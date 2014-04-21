@@ -2,9 +2,16 @@
 
 var http = require('http');
 
-var mappings = require('./data/mappings');
+var connect = require('connect');
 
-var server = http.createServer(function (req, res) {
+var mappings = require('./data/mappings'),
+    logger = require('./logger');
+
+var app = connect();
+
+app.use(logger('Redirector'));
+
+app.use(function (req, res) {
   mappings.get(req.url, function (err, mapping) {
     if (err) {
       res.writeHead(404);
@@ -17,4 +24,4 @@ var server = http.createServer(function (req, res) {
   });
 });
 
-server.listen(3000);
+http.createServer(app).listen(3000);
