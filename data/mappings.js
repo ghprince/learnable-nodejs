@@ -6,9 +6,7 @@ var data = {
 };
 
 var mappings = {
-  get: function (url, callback) {
-    var alias = url.substring(1);
-
+  get: function (alias, callback) {
     if (!data[alias]) {
       return callback(new Error('URL not found.'));
     }

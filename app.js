@@ -1,26 +1,30 @@
 'use strict';
 
-var http = require('http');
+var http = require('http'),
+    path = require('path');
 
-var connect = require('connect');
+var express = require('express');
 
 var mappings = require('./data/mappings'),
     logger = require('./logger');
 
-var app = connect();
+var app = express();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(logger('Redirector'));
 
-app.use(function (req, res) {
-  mappings.get(req.url, function (err, mapping) {
-    if (err) {
-      res.writeHead(404);
-      return res.end();
-    }
+app.get('/', function (req, res) {
+  res.render("index", {
+    mappings: "Hello world from EJS!"
+  })
+});
 
-    res.writeHead(302, { location: mapping });
-    res.end();
-
+app.get('/:alias', function (req, res) {
+  mappings.get(req.params.alias, function (err, mapping) {
+    if (err) { return res.send(404); }
+    res.redirect(mapping);
   });
 });
 

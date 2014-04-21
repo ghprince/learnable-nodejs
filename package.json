@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "app.js",
   "dependencies": {
-    "connect": "2.14.4"
+    "express": "4.0.0",
+    "ejs": "1.0.0"
   }
 }
