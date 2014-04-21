@@ -5,6 +5,17 @@
   </head>
   <body>
     <h1>Redirector Mappings</h1>
-    <%= mappings %>
+    <table>
+      <tr>
+        <th>Alias</th>
+        <th>URL</th>
+      </tr>
+      <% for (var i = 0; i < mappings.length; i++) { %>
+      </tr>
+        <th><a href="/<%= mappings[i].alias %>"><%= mappings[i].alias %></a></th>
+        <th><%= mappings[i].url %>
+      </tr>
+      <% } %>
+    </table>
   </body>
 </html>

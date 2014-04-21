@@ -4,6 +4,7 @@
   "main": "app.js",
   "dependencies": {
     "express": "4.0.0",
-    "ejs": "1.0.0"
+    "ejs": "1.0.0",
+    "nedb": "0.10.2"
   }
 }

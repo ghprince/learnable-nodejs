@@ -1,17 +1,31 @@
 'use strict';
 
-var data = {
-  g: 'http://www.google.com',
-  a: 'http://www.amazon.com'
+var path = require('path');
+
+var Datastore = require('nedb');
+
+var db = {
+  mappings: new Datastore({ filename: path.join(__dirname, 'mappings.db'),
+                            autoload: true})
 };
+
+db.mappings.insert({ alias: 'g', url: 'http://www.google.com' },
+                    function (err, insertedDocument) {
+//...
+});
 
 var mappings = {
   get: function (alias, callback) {
-    if (!data[alias]) {
-      return callback(new Error('URL not found.'));
-    }
-
-    return callback(null, data[alias]);
+    db.mappings.findOne({ alias: alias }, function (err, mapping) {
+      if (err || !mapping) { return callback(new Error('URL not found.')); }
+      callback(null, mapping.url);
+    });
+  },
+  create: function (alias, url, callback) {
+    db.mappings.insert({ alias: alias, url: url}, callback);
+  },
+  list: function (callback) {
+    db.mappings.find({}).sort({ alias: 1 }).exec(callback);
   }
 };
 
